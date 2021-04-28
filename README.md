@@ -56,6 +56,9 @@ We include the information from these pre-existing databases:
 - [CTD](http://ctdbase.org/)
 - [Phospho.ELM](http://phospho.elm.eu.org/)
 - [DrugBank](https://www.drugbank.ca/)
+- [CONIB](https://pharmacome.github.io/conib/)
+- [CRoG](https://github.com/chemical-roles/chemical-roles)
+- [DGI](https://www.dgidb.org/)
 
 These databases are retrieved primarily using the tools in `indra.sources`. The
 statements extracted from all of these sources are stored and updated in the
