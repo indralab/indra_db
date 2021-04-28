@@ -470,6 +470,39 @@ class CrogManager(KnowledgebaseManager):
         return unique_stmts
 
 
+class ConibManager(KnowledgebaseManager):
+    """This manager handles retrieval and processing of the CONIB dataset."""
+    name = 'CONIB'
+    short_name = 'conib'
+    source = 'conib'
+
+    def _get_statements(self):
+        import pybel
+        import requests
+        from indra.sources.bel import process_pybel_graph
+        logger.info('Processing CONIB from web')
+        url = 'https://github.com/pharmacome/conib/raw/master/conib' \
+            '/_cache.bel.nodelink.json'
+        res_json = requests.get(url).json()
+        graph = pybel.from_nodelink(res_json)
+        # Get INDRA statements
+        pbp = process_pybel_graph(graph)
+
+        # Fix and issue with PMID spaces
+        for stmt in pbp.statements:
+            for ev in stmt.evidence:
+                if ev.pmid:
+                    ev.pmid = ev.pmid.strip()
+                if ev.text_refs.get('PMID'):
+                    ev.text_refs['PMID'] = ev.text_refs['PMID'].strip()
+
+        logger.info('Expanding evidences and deduplicating')
+        filtered_stmts = [s for s in _expanded(pbp.statements)]
+        unique_stmts, _ = extract_duplicates(filtered_stmts,
+                                             KeyFunc.mk_and_one_ev_src)
+        return unique_stmts
+
+
 if __name__ == '__main__':
     import sys
     from indra_db.util import get_db
