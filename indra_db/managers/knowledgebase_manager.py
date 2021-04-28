@@ -457,7 +457,7 @@ class CrogManager(KnowledgebaseManager):
     """This manager handles retrieval and processing of the CRoG dataset."""
     name = 'CRoG'
     short_name = 'crog'
-    source = 'crog'
+    source = 'bel'
 
     def _get_statements(self):
         from indra.sources import crog
@@ -474,7 +474,7 @@ class ConibManager(KnowledgebaseManager):
     """This manager handles retrieval and processing of the CONIB dataset."""
     name = 'CONIB'
     short_name = 'conib'
-    source = 'conib'
+    source = 'bel'
 
     def _get_statements(self):
         import pybel
