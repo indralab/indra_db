@@ -436,6 +436,23 @@ def _expanded(stmts):
             yield stmt
 
 
+class DgiManager(KnowledgebaseManager):
+    """This manager handles retrieval and processing of the DGI dataset."""
+    name = 'DGI'
+    short_name = 'dgi'
+    source = 'dgi'
+
+    def _get_statements(self):
+        from indra.sources import dgi
+        logger.info('Processing DGI from web')
+        dp = dgi.process_version('2020-Nov')
+        logger.info('Expanding evidences and deduplicating')
+        filtered_stmts = [s for s in _expanded(dp.statements)]
+        unique_stmts, _ = extract_duplicates(filtered_stmts,
+                                             KeyFunc.mk_and_one_ev_src)
+        return unique_stmts
+
+
 if __name__ == '__main__':
     import sys
     from indra_db.util import get_db
