@@ -453,6 +453,23 @@ class DgiManager(KnowledgebaseManager):
         return unique_stmts
 
 
+class CrogManager(KnowledgebaseManager):
+    """This manager handles retrieval and processing of the CRoG dataset."""
+    name = 'CRoG'
+    short_name = 'crog'
+    source = 'crog'
+
+    def _get_statements(self):
+        from indra.sources import crog
+        logger.info('Processing CRoG from web')
+        cp = crog.process_from_web()
+        logger.info('Expanding evidences and deduplicating')
+        filtered_stmts = [s for s in _expanded(cp.statements)]
+        unique_stmts, _ = extract_duplicates(filtered_stmts,
+                                             KeyFunc.mk_and_one_ev_src)
+        return unique_stmts
+
+
 if __name__ == '__main__':
     import sys
     from indra_db.util import get_db
