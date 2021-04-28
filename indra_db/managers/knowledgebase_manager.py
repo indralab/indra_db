@@ -457,7 +457,7 @@ class CrogManager(KnowledgebaseManager):
     """This manager handles retrieval and processing of the CRoG dataset."""
     name = 'CRoG'
     short_name = 'crog'
-    source = 'bel'
+    source = 'crog'
 
     def _get_statements(self):
         from indra.sources import crog
